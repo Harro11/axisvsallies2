@@ -1,0 +1,134 @@
+// File: /server/GameStateManager.js
+
+class GameStateManager {
+  constructor(players) {
+    this.players = players; // array of player IDs
+    this.currentTurn = 0;
+    this.turnPhase = 'purchase'; // purchase, combat, non-combat, placement, collect
+    this.map = this.initializeMap();
+    this.units = this.initializeUnits();
+    this.income = this.initializeIncome();
+    this.logs = [];
+    this.computerPlayer = 'COMPUTER'; // Simple computer player
+  }
+
+  initializeMap() {
+    return {};
+  }
+
+  initializeUnits() {
+    return {};
+  }
+
+  initializeIncome() {
+    const income = {};
+    this.players.forEach(player => {
+      income[player] = 0; // to be calculated
+    });
+    return income;
+  }
+
+  startTurn() {
+    this.turnPhase = 'purchase';
+    this.log(`${this.getCurrentPlayer()} starts turn.`);
+    if (this.getCurrentPlayer() === this.computerPlayer) {
+      this.runComputerTurn();
+    }
+  }
+
+  nextPhase() {
+    const phases = ['purchase', 'combat', 'non-combat', 'placement', 'collect'];
+    const currentIndex = phases.indexOf(this.turnPhase);
+    if (currentIndex < phases.length - 1) {
+      this.turnPhase = phases[currentIndex + 1];
+    } else {
+      this.endTurn();
+    }
+    this.log(`Phase changed to ${this.turnPhase}.`);
+  }
+
+  endTurn() {
+    this.currentTurn = (this.currentTurn + 1) % this.players.length;
+    this.turnPhase = 'purchase';
+    this.log(`${this.getCurrentPlayer()} ends turn.`);
+    this.startTurn();
+  }
+
+  getCurrentPlayer() {
+    return this.players[this.currentTurn];
+  }
+
+  updateIncome() {
+    // Recalculate income based on current territory control
+  }
+
+  log(message) {
+    this.logs.push({ turn: this.currentTurn, phase: this.turnPhase, message });
+  }
+
+  moveUnit(playerId, fromTerritory, toTerritory, unitType, count) {
+    // Validate and perform unit movement
+  }
+
+  resolveCombat(territory) {
+    // Handle combat resolution based on units in the territory
+  }
+
+  placeUnits(playerId, territory, units) {
+    // Place purchased units during the placement phase
+  }
+
+  runComputerTurn() {
+    // Simulate computer player turn logic
+    const phases = ['purchase', 'combat', 'non-combat', 'placement', 'collect'];
+    for (let phase of phases) {
+      this.turnPhase = phase;
+      this.log(`Computer is in phase: ${phase}`);
+      switch (phase) {
+        case 'purchase':
+          this.computerPurchase();
+          break;
+        case 'combat':
+          this.computerCombat();
+          break;
+        case 'non-combat':
+          this.computerNonCombat();
+          break;
+        case 'placement':
+          this.computerPlacement();
+          break;
+        case 'collect':
+          this.computerCollect();
+          break;
+      }
+    }
+    this.endTurn();
+  }
+
+  computerPurchase() {
+    this.log('Computer is purchasing units.');
+    // Implement simple logic
+  }
+
+  computerCombat() {
+    this.log('Computer is resolving combat.');
+    // Implement simple logic
+  }
+
+  computerNonCombat() {
+    this.log('Computer is performing non-combat moves.');
+    // Implement simple logic
+  }
+
+  computerPlacement() {
+    this.log('Computer is placing units.');
+    // Implement simple logic
+  }
+
+  computerCollect() {
+    this.log('Computer is collecting income.');
+    // Implement simple logic
+  }
+}
+
+module.exports = GameStateManager;
